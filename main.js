@@ -1572,7 +1572,7 @@ window.debugButtonTest = function() {
 
 // Direct function to force show level selection (bypass all app logic)
 window.debugShowLevelSelection = function() {
-    console.log('🚨 FORCING LEVEL SELECTION DISPLAY');
+    console.log('🚨 FORCING LEVEL SELECTION DISPLAY - EMERGENCY MODE');
     
     try {
         // Force hide hero section
@@ -1586,26 +1586,59 @@ window.debugShowLevelSelection = function() {
         const levelSelection = document.querySelector('.level-selection');
         if (levelSelection) {
             levelSelection.style.display = 'block';
-            console.log('✅ Level selection shown forcefully');
-            console.log('🔍 Level selection innerHTML:', levelSelection.innerHTML.substring(0, 200) + '...');
+            levelSelection.style.visibility = 'visible';
+            levelSelection.style.opacity = '1';
+            console.log('✅ Level selection shown forcefully with full visibility');
+            console.log('🔍 Level selection content preview:', levelSelection.innerHTML.substring(0, 200) + '...');
         } else {
             console.error('❌ Level selection element not found in DOM');
             console.log('🔍 All elements with "level":', document.querySelectorAll('[class*="level"]'));
         }
         
-        // Force hide other sections
+        // Force hide other sections that might interfere
         const testResults = document.querySelector('.test-results');
         if (testResults) {
             testResults.style.display = 'none';
             console.log('✅ Test results hidden');
         }
         
-        // Reset scroll
+        const testMonitoring = document.querySelector('.test-monitoring');
+        if (testMonitoring) {
+            testMonitoring.style.display = 'none';
+            console.log('✅ Test monitoring hidden');
+        }
+        
+        // Prevent any URL hash issues
+        if (window.location.hash) {
+            history.pushState("", document.title, window.location.pathname + window.location.search);
+        }
+        
+        // Reset scroll and focus
         window.scrollTo(0, 0);
-        console.log('✅ Scroll reset');
+        console.log('✅ Scroll reset and URL hash cleared');
+        
+        // Verify final state
+        console.log('🔍 Final verification:', {
+            heroDisplay: hero?.style.display,
+            levelSelectionDisplay: levelSelection?.style.display,
+            currentURL: window.location.href,
+            scrollPosition: window.scrollY
+        });
         
     } catch (error) {
         console.error('❌ Error forcing level selection:', error);
+    }
+};
+
+// Quick test function to simulate button click
+window.debugClickStart = function() {
+    console.log('🧪 SIMULATING START BUTTON CLICK');
+    const startBtn = document.querySelector('.start-test-btn');
+    if (startBtn) {
+        startBtn.click();
+        console.log('✅ Start button clicked programmatically');
+    } else {
+        console.error('❌ Start button not found');
     }
 };
 
@@ -1683,8 +1716,10 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('  - debugAppState() - Check app state');  
     console.log('  - debugForceEventBinding() - Emergency event binding');
     console.log('  - debugShowLevelSelection() - Force show level selection');
+    console.log('  - debugClickStart() - Simulate start button click');
     console.log('🎯 To test immediately, type: debugButtonTest()');
-    console.log('🚨 If button shows About page instead: debugShowLevelSelection()');
+    console.log('🚨 If button shows About page: debugShowLevelSelection()');
+    console.log('⚡ Quick test: debugClickStart()');
     
     console.log('📊 DOM Load Status:', {
         readyState: document.readyState,
@@ -1816,19 +1851,71 @@ document.addEventListener('DOMContentLoaded', () => {
         // The event listeners above will handle initialization
     }
     
-    // BACKUP: Add direct event handler as last resort
-    console.log('🔧 Adding backup event handler for start button...');
+    // IMMEDIATE: Add strong event handler to override any issues
+    console.log('🔧 Adding immediate strong event handler for start button...');
+    const immediateStartBtn = document.querySelector('.start-test-btn');
+    if (immediateStartBtn) {
+        // Remove any existing event listeners by cloning the element
+        const newStartBtn = immediateStartBtn.cloneNode(true);
+        immediateStartBtn.parentNode.replaceChild(newStartBtn, immediateStartBtn);
+        
+        // Add our strong event handler
+        newStartBtn.addEventListener('click', function(e) {
+            console.log('🚨 STRONG CLICK HANDLER ACTIVATED - BYPASSING ALL ISSUES!');
+            
+            // Prevent ALL default behaviors and propagation
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            
+            // Force navigation immediately without any app state checks
+            console.log('🎯 FORCING IMMEDIATE NAVIGATION TO LEVEL SELECTION');
+            
+            try {
+                // Hide hero section
+                const hero = document.querySelector('.hero');
+                if (hero) hero.style.display = 'none';
+                
+                // Show level selection
+                const levelSelection = document.querySelector('.level-selection');
+                if (levelSelection) {
+                    levelSelection.style.display = 'block';
+                    console.log('✅ Level selection forced to display');
+                }
+                
+                // Hide other sections
+                const testResults = document.querySelector('.test-results');
+                if (testResults) testResults.style.display = 'none';
+                
+                // Prevent any scrolling issues
+                window.scrollTo(0, 0);
+                history.pushState(null, null, window.location.pathname);
+                
+                console.log('✅ Navigation completed successfully - Level selection should now be visible');
+                
+            } catch (error) {
+                console.error('❌ Error in navigation:', error);
+            }
+            
+            // Return false to ensure no default action
+            return false;
+        }, { capture: true });
+        
+        console.log('✅ Strong event handler added immediately');
+    }
+    
+    // BACKUP: Add additional event handler as fallback
     setTimeout(() => {
         const startBtn = document.querySelector('.start-test-btn');
         if (startBtn) {
-            // Add a backup click handler with higher priority
+            console.log('🔧 Adding backup event handler as secondary measure...');
             startBtn.addEventListener('click', function(e) {
                 console.log('🚨 BACKUP CLICK HANDLER ACTIVATED!');
                 e.preventDefault();
                 e.stopImmediatePropagation();
                 
                 // Force show level selection regardless of app state
-                console.log('🎯 Forcing navigation to level selection...');
+                console.log('🎯 Backup: Forcing navigation to level selection...');
                 document.querySelector('.hero').style.display = 'none';
                 document.querySelector('.level-selection').style.display = 'block';
                 if (document.querySelector('.test-results')) {
@@ -1836,8 +1923,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 window.scrollTo(0, 0);
                 console.log('✅ Backup navigation completed');
-            }, { capture: true }); // Use capture phase for higher priority
-            console.log('✅ Backup event handler added');
+            }, { capture: true });
         }
-    }, 1000); // Wait 1 second to ensure DOM is fully ready
+    }, 1000);
 });

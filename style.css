@@ -1352,3 +1352,17 @@ footer p {
     50% { transform: translateX(10px) translateY(5px) scale(1.1); }
     100% { transform: translateX(-10px) translateY(-5px); }
 }
+
+/* Force visibility for level selection when shown */
+.level-selection[style*="display: block"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1000 !important;
+}
+
+/* Ensure hero is properly hidden when needed */
+.hero[style*="display: none"] {
+    display: none !important;
+}

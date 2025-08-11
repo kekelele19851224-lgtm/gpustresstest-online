@@ -1642,6 +1642,69 @@ window.debugClickStart = function() {
     }
 };
 
+// DIRECT INLINE FUNCTION for HTML onclick (works with file:// protocol)
+window.forceShowLevelSelection = function() {
+    console.log('🚨 DIRECT INLINE FUNCTION CALLED - FORCING LEVEL SELECTION');
+    
+    try {
+        // Prevent any navigation
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        
+        // Force hide main hero section
+        const hero = document.querySelector('.hero');
+        if (hero) {
+            hero.style.display = 'none';
+            console.log('✅ Hero section hidden');
+        }
+        
+        // Force show level selection with all CSS overrides
+        const levelSelection = document.querySelector('.level-selection');
+        if (levelSelection) {
+            levelSelection.style.display = 'block';
+            levelSelection.style.visibility = 'visible';
+            levelSelection.style.opacity = '1';
+            levelSelection.style.position = 'relative';
+            levelSelection.style.zIndex = '1000';
+            console.log('✅ Level selection shown with full visibility');
+        } else {
+            console.error('❌ Level selection not found');
+            return false;
+        }
+        
+        // Hide other competing sections
+        const testResults = document.querySelector('.test-results');
+        if (testResults) testResults.style.display = 'none';
+        
+        const testMonitoring = document.querySelector('.test-monitoring');
+        if (testMonitoring) testMonitoring.style.display = 'none';
+        
+        // Clear any URL hash and scroll issues
+        if (window.location.hash) {
+            window.location.hash = '';
+        }
+        window.scrollTo(0, 0);
+        
+        console.log('✅ DIRECT FUNCTION: Level selection should now be visible!');
+        
+        // Verify and report final state
+        console.log('🔍 Final state verification:', {
+            heroVisible: hero?.style.display !== 'none',
+            levelSelectionVisible: levelSelection?.style.display === 'block',
+            currentURL: window.location.href,
+            scrollTop: window.scrollY
+        });
+        
+        return false; // Prevent any default action
+        
+    } catch (error) {
+        console.error('❌ Error in forceShowLevelSelection:', error);
+        return false;
+    }
+};
+
 // Debug function to check current state (can be called from console)
 window.debugAppState = function() {
     console.log('🔍 Current App State:', {

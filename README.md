@@ -76,7 +76,7 @@ GPU Stress Test Online is a comprehensive, browser-based graphics card testing t
 ### Setup
 ```bash
 # Clone the repository
-git clone https://github.com/kekelele1985I224-Igtm/gpustresstest-online.git
+git clone https://github.com/kekelele19851224-lgtm/gpustresstest-online.git
 cd gpustresstest-online
 
 # Start local development server
@@ -217,14 +217,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 **Support**
 
-- **Issues**: [GitHub Issues](https://github.com/kekelele1985I224-Igtm/gpustresstest-online/issues)
+- **Issues**: [GitHub Issues](https://github.com/kekelele19851224-lgtm/gpustresstest-online/issues)
 - **Documentation**: This README and inline comments
 - **Website**: [gpustresstest.online](https://gpustresstest.online)
 
 ## 🔗 **Links**
 
 - **Live Site**: [gpustresstest.online](https://gpustresstest.online)
-- **Repository**: [GitHub](https://github.com/kekelele1985I224-Igtm/gpustresstest-online)
+- **Repository**: [GitHub](https://github.com/kekelele19851224-lgtm/gpustresstest-online)
 - **Documentation**: [Three.js Docs](https://threejs.org/docs/)
 - **WebGL Support**: [Can I Use WebGL](https://caniuse.com/webgl)
 

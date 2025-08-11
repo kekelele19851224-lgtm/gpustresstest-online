@@ -194,6 +194,19 @@ function initThreeJS() {
 
 // Create stress test objects based on selected level
 function createStressTestObjects() {
+    console.log('🎲 createStressTestObjects() called');
+    
+    // Safety check: Don't create objects if test is not running or if we're not in a test mode
+    if (!isTestRunning) {
+        console.warn('⚠️ createStressTestObjects called but test is not running - aborting');
+        return;
+    }
+    
+    if (!scene) {
+        console.warn('⚠️ createStressTestObjects called but Three.js scene is not available - aborting');
+        return;
+    }
+    
     testObjects = [];
     const levelConfig = testLevels[currentLevel];
     const baseObjectCount = levelConfig.objects;
@@ -238,8 +251,22 @@ function createStressTestObjects() {
     directionalLight.position.set(1, 1, 1);
     scene.add(directionalLight);
     
-    document.getElementById('object-count').textContent = objectCount;
-    document.getElementById('objects-display').textContent = objectCount;
+    // Safely update UI elements
+    const objectCountEl = document.getElementById('object-count');
+    const objectsDisplayEl = document.getElementById('objects-display');
+    
+    if (objectCountEl) {
+        objectCountEl.textContent = objectCount;
+    } else {
+        console.warn('object-count element not found');
+    }
+    
+    if (objectsDisplayEl) {
+        objectsDisplayEl.textContent = objectCount;
+    } else {
+        console.warn('objects-display element not found');
+    }
+    
     console.log(`Created ${objectCount} test objects`);
 }
 
@@ -301,12 +328,22 @@ function initFPSChart() {
 
 // Update system information display
 function updateSystemInfo(gpuInfo) {
-    document.getElementById('gpu-info').textContent = gpuInfo.renderer || 'Unknown GPU';
-    document.getElementById('device-type').textContent = isMobile ? 'Mobile' : 'Desktop';
+    const gpuInfoEl = document.getElementById('gpu-info');
+    const deviceTypeEl = document.getElementById('device-type');
+    const webglVersionEl = document.getElementById('webgl-version');
     
-    const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
-    const webglVersion = gl instanceof WebGL2RenderingContext ? '2.0' : '1.0';
-    document.getElementById('webgl-version').textContent = webglVersion;
+    if (gpuInfoEl) {
+        gpuInfoEl.textContent = gpuInfo.renderer || 'Unknown GPU';
+    }
+    if (deviceTypeEl) {
+        deviceTypeEl.textContent = isMobile ? 'Mobile' : 'Desktop';
+    }
+    
+    if (webglVersionEl) {
+        const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+        const webglVersion = gl instanceof WebGL2RenderingContext ? '2.0' : '1.0';
+        webglVersionEl.textContent = webglVersion;
+    }
 }
 
 // Animation loop
@@ -320,8 +357,15 @@ function animate() {
     const remaining = Math.max(0, testDuration - Math.floor(elapsed / 1000));
     const progress = ((testDuration - remaining) / testDuration) * 100;
     
-    document.getElementById('progress-time').textContent = remaining + 's';
-    document.getElementById('progress-fill').style.width = progress + '%';
+    const progressTimeEl = document.getElementById('progress-time');
+    const progressFillEl = document.getElementById('progress-fill');
+    
+    if (progressTimeEl) {
+        progressTimeEl.textContent = remaining + 's';
+    }
+    if (progressFillEl) {
+        progressFillEl.style.width = progress + '%';
+    }
     
     // Stop test when time is up
     if (remaining === 0) {
@@ -349,12 +393,19 @@ function animate() {
         const fps = Math.round(frameCount / ((now - lastFPSUpdate) / 1000));
         
         // Update FPS displays
-        document.getElementById('fps-display').textContent = fps;
+        const fpsDisplayEl = document.getElementById('fps-display');
+        const avgFpsDisplayEl = document.getElementById('avg-fps-display');
+        
+        if (fpsDisplayEl) {
+            fpsDisplayEl.textContent = fps;
+        }
         
         // Calculate average FPS
         const elapsedSeconds = (now - testStartTime) / 1000;
         avgFPS = Math.round(totalFrames / elapsedSeconds);
-        document.getElementById('avg-fps-display').textContent = avgFPS;
+        if (avgFpsDisplayEl) {
+            avgFpsDisplayEl.textContent = avgFPS;
+        }
         
         // Track min/max FPS for results
         testResults.minFPS = Math.min(testResults.minFPS, fps);
@@ -379,7 +430,10 @@ function animate() {
         // Simulate temperature increase during stress test
         const levelMultiplier = testLevels[currentLevel].multiplier;
         simulatedTemp = Math.min(90, 65 + (elapsedSeconds * 0.5 * levelMultiplier) + (Math.random() * 3 - 1.5));
-        document.getElementById('temp-display').textContent = Math.round(simulatedTemp) + '°C';
+        const tempDisplayEl = document.getElementById('temp-display');
+        if (tempDisplayEl) {
+            tempDisplayEl.textContent = Math.round(simulatedTemp) + '°C';
+        }
         testResults.maxTemp = Math.max(testResults.maxTemp, simulatedTemp);
         
         frameCount = 0;
@@ -439,7 +493,28 @@ function saveTestResults() {
 
 // Start GPU Test function (with level)
 function startGPUTest(level = 'medium') {
-    if (isTestRunning) return;
+    console.log('🚀 startGPUTest() called with level:', level);
+    
+    if (isTestRunning) {
+        console.warn('⚠️ Test already running, ignoring new start request');
+        return;
+    }
+    
+    // Safety check: Make sure we have the required elements
+    const testCanvas = document.getElementById('test-canvas');
+    const testMonitoring = document.querySelector('.test-monitoring');
+    
+    if (!testCanvas) {
+        console.error('❌ Cannot start test: test-canvas element not found');
+        showError('Test interface not available. Please refresh the page.');
+        return;
+    }
+    
+    if (!scene) {
+        console.error('❌ Cannot start test: Three.js scene not initialized');
+        showError('3D engine not ready. Please refresh the page.');
+        return;
+    }
     
     currentLevel = level;
     console.log(`GPU Test initiated - Level: ${testLevels[level].name}`);
@@ -464,9 +539,10 @@ function startGPUTest(level = 'medium') {
     };
     
     // Show canvas and monitoring interface
-    document.getElementById('test-canvas').style.display = 'block';
-    document.querySelector('.test-monitoring').style.display = 'block';
-    document.querySelector('.level-selection').style.display = 'none';
+    if (testCanvas) testCanvas.style.display = 'block';
+    if (testMonitoring) testMonitoring.style.display = 'block';
+    const levelSelection = document.querySelector('.level-selection');
+    if (levelSelection) levelSelection.style.display = 'none';
     
     // Initialize FPS chart
     initFPSChart();
@@ -515,8 +591,11 @@ function stopGPUTest() {
     }
     
     // Hide canvas and monitoring interface
-    document.getElementById('test-canvas').style.display = 'none';
-    document.querySelector('.test-monitoring').style.display = 'none';
+    const testCanvas = document.getElementById('test-canvas');
+    const testMonitoring = document.querySelector('.test-monitoring');
+    
+    if (testCanvas) testCanvas.style.display = 'none';
+    if (testMonitoring) testMonitoring.style.display = 'none';
     
     // Show results
     showTestResults();
@@ -526,16 +605,26 @@ function stopGPUTest() {
 
 // Show test results page
 function showTestResults() {
-    // Update results display
-    document.getElementById('completed-level').textContent = testLevels[currentLevel].name;
-    document.getElementById('completion-time').textContent = new Date().toLocaleTimeString();
-    document.getElementById('final-score').textContent = testResults.score;
-    document.getElementById('result-avg-fps').textContent = testResults.avgFPS;
-    document.getElementById('result-min-fps').textContent = testResults.minFPS === Infinity ? 0 : testResults.minFPS;
-    document.getElementById('result-max-fps').textContent = testResults.maxFPS;
-    document.getElementById('result-objects').textContent = testLevels[currentLevel].objects;
-    document.getElementById('result-gpu-temp').textContent = Math.round(testResults.maxTemp) + '°C';
-    document.getElementById('result-stability').textContent = testResults.stability + '%';
+    // Update results display with null checks
+    const completedLevelEl = document.getElementById('completed-level');
+    const completionTimeEl = document.getElementById('completion-time');
+    const finalScoreEl = document.getElementById('final-score');
+    const resultAvgFpsEl = document.getElementById('result-avg-fps');
+    const resultMinFpsEl = document.getElementById('result-min-fps');
+    const resultMaxFpsEl = document.getElementById('result-max-fps');
+    const resultObjectsEl = document.getElementById('result-objects');
+    const resultGpuTempEl = document.getElementById('result-gpu-temp');
+    const resultStabilityEl = document.getElementById('result-stability');
+    
+    if (completedLevelEl) completedLevelEl.textContent = testLevels[currentLevel].name;
+    if (completionTimeEl) completionTimeEl.textContent = new Date().toLocaleTimeString();
+    if (finalScoreEl) finalScoreEl.textContent = testResults.score;
+    if (resultAvgFpsEl) resultAvgFpsEl.textContent = testResults.avgFPS;
+    if (resultMinFpsEl) resultMinFpsEl.textContent = testResults.minFPS === Infinity ? 0 : testResults.minFPS;
+    if (resultMaxFpsEl) resultMaxFpsEl.textContent = testResults.maxFPS;
+    if (resultObjectsEl) resultObjectsEl.textContent = testLevels[currentLevel].objects;
+    if (resultGpuTempEl) resultGpuTempEl.textContent = Math.round(testResults.maxTemp) + '°C';
+    if (resultStabilityEl) resultStabilityEl.textContent = testResults.stability + '%';
     
     // Update score rating
     const scoreRating = document.getElementById('score-rating');
@@ -603,23 +692,66 @@ function showLevelSelection() {
     const heroElement = document.querySelector('.hero');
     const levelSelectionElement = document.querySelector('.level-selection');
     const testResultsElement = document.querySelector('.test-results');
+    const testMonitoringElement = document.querySelector('.test-monitoring');
     
     console.log('🔍 Elements found:', {
         hero: !!heroElement,
         levelSelection: !!levelSelectionElement,
-        testResults: !!testResultsElement
+        testResults: !!testResultsElement,
+        testMonitoring: !!testMonitoringElement
     });
     
+    // Show hero section but hide its main content, keep level-selection visible
     if (heroElement) {
-        heroElement.style.display = 'none';
-        console.log('✅ Hero section hidden');
+        heroElement.style.display = 'block';
+        
+        // Hide hero's direct children except level-selection
+        const heroChildren = heroElement.children;
+        for (let i = 0; i < heroChildren.length; i++) {
+            if (!heroChildren[i].classList.contains('level-selection')) {
+                heroChildren[i].style.display = 'none';
+            }
+        }
+        console.log('✅ Hero section shown with only level selection visible');
     } else {
         console.error('❌ Hero element not found');
     }
     
     if (levelSelectionElement) {
         levelSelectionElement.style.display = 'block';
-        console.log('✅ Level selection shown');
+        levelSelectionElement.style.position = 'relative';
+        levelSelectionElement.style.width = '100%';
+        levelSelectionElement.style.minHeight = '100vh';
+        levelSelectionElement.style.backgroundColor = '#1a1a1a';
+        levelSelectionElement.style.padding = '50px 20px';
+        levelSelectionElement.style.boxSizing = 'border-box';
+        levelSelectionElement.style.visibility = 'visible';
+        levelSelectionElement.style.opacity = '1';
+        levelSelectionElement.style.zIndex = '1000';
+        console.log('✅ Level selection shown with full styling');
+        
+        // Ensure level buttons are clickable
+        const levelButtons = levelSelectionElement.querySelectorAll('.level-btn');
+        console.log(`🔘 Found ${levelButtons.length} level buttons`);
+        levelButtons.forEach((btn, index) => {
+            btn.style.pointerEvents = 'auto';
+            btn.style.cursor = 'pointer';
+            btn.disabled = false;
+            
+            // Add direct click handler as backup
+            btn.onclick = function(e) {
+                console.log(`🔘 Direct click handler for button ${index + 1}`);
+                e.preventDefault();
+                e.stopPropagation();
+                const levelCard = btn.closest('.level-card');
+                const level = levelCard ? levelCard.dataset.level : 'medium';
+                console.log('Direct click level:', level);
+                handleLevelButtonClick(level);
+            };
+            
+            console.log(`✅ Level button ${index + 1} (${btn.closest('.level-card')?.dataset?.level}) configured`);
+        });
+        
     } else {
         console.error('❌ Level selection element not found');
     }
@@ -627,9 +759,21 @@ function showLevelSelection() {
     if (testResultsElement) {
         testResultsElement.style.display = 'none';
         console.log('✅ Test results hidden');
-    } else {
-        console.error('❌ Test results element not found');
     }
+    
+    if (testMonitoringElement) {
+        testMonitoringElement.style.display = 'none';
+        console.log('✅ Test monitoring hidden');
+    }
+    
+    // Hide other sections that might interfere
+    const featuresSection = document.querySelector('.features');
+    const aboutSection = document.querySelector('.about-section');
+    const howItWorksSection = document.querySelector('.how-it-works');
+    
+    if (featuresSection) featuresSection.style.display = 'none';
+    if (aboutSection) aboutSection.style.display = 'none';
+    if (howItWorksSection) howItWorksSection.style.display = 'none';
     
     // Prevent any scrolling to anchors
     window.scrollTo(0, 0);
@@ -638,9 +782,144 @@ function showLevelSelection() {
 
 // Show home page
 function showHomePage() {
-    document.querySelector('.hero').style.display = 'block';
-    document.querySelector('.level-selection').style.display = 'none';
-    document.querySelector('.test-results').style.display = 'none';
+    console.log('🏠 showHomePage() called - cleaning up and returning to home');
+    
+    // CRITICAL: Stop any running tests first and reset all test state
+    console.log('🔄 Resetting all test state variables...');
+    isTestRunning = false;
+    
+    // Stop all animations
+    if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+    }
+    
+    if (fallbackAnimationId) {
+        cancelAnimationFrame(fallbackAnimationId);
+        fallbackAnimationId = null;
+    }
+    
+    // Reset test variables
+    frameCount = 0;
+    totalFrames = 0;
+    testStartTime = 0;
+    lastFPSUpdate = 0;
+    avgFPS = 0;
+    simulatedTemp = 65;
+    
+    // Reset test results
+    testResults = {
+        minFPS: Infinity,
+        maxFPS: 0,
+        avgFPS: 0,
+        maxTemp: 65,
+        stability: 100,
+        score: 0
+    };
+    
+    console.log('✅ All test state variables reset');
+    
+    // Clear Three.js objects if they exist
+    if (scene && testObjects.length > 0) {
+        console.log('🧹 Clearing Three.js test objects');
+        testObjects.forEach(obj => {
+            scene.remove(obj);
+            // Dispose geometry and materials to free memory
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) {
+                if (Array.isArray(obj.material)) {
+                    obj.material.forEach(mat => mat.dispose());
+                } else {
+                    obj.material.dispose();
+                }
+            }
+        });
+        testObjects = [];
+        
+        // Clear lights
+        scene.children.forEach(child => {
+            if (child.type === 'AmbientLight' || child.type === 'DirectionalLight') {
+                scene.remove(child);
+            }
+        });
+    }
+    
+    // Clean up chart
+    if (fpsChart) {
+        fpsChart.destroy();
+        fpsChart = null;
+    }
+    
+    // Hide and reset canvas
+    const testCanvas = document.getElementById('test-canvas');
+    if (testCanvas) {
+        testCanvas.style.display = 'none';
+        // Clear canvas
+        const ctx = testCanvas.getContext('2d');
+        if (ctx) {
+            ctx.clearRect(0, 0, testCanvas.width, testCanvas.height);
+        }
+    }
+    
+    // Hide 2D fallback container if it exists
+    const fallbackContainer = document.getElementById('fallback-test-container');
+    if (fallbackContainer) {
+        fallbackContainer.style.display = 'none';
+        fallbackContainer.innerHTML = '';
+    }
+    
+    // Reset DOM elements
+    const heroElement = document.querySelector('.hero');
+    const levelSelectionElement = document.querySelector('.level-selection');
+    const testResultsElement = document.querySelector('.test-results');
+    const testMonitoringElement = document.querySelector('.test-monitoring');
+    const featuresSection = document.querySelector('.features');
+    const aboutSection = document.querySelector('.about-section');
+    const howItWorksSection = document.querySelector('.how-it-works');
+    
+    if (heroElement) {
+        heroElement.style.display = 'block';
+        heroElement.style.position = '';
+        heroElement.style.minHeight = '';
+        heroElement.style.backgroundColor = '';
+        heroElement.style.padding = '';
+        heroElement.style.margin = '';
+        
+        // Show all hero children that were hidden
+        const heroChildren = heroElement.children;
+        for (let i = 0; i < heroChildren.length; i++) {
+            if (!heroChildren[i].classList.contains('level-selection')) {
+                heroChildren[i].style.display = '';  // Reset to default
+            }
+        }
+    }
+    
+    if (levelSelectionElement) {
+        levelSelectionElement.style.display = 'none';
+        // Reset any custom styles
+        levelSelectionElement.style.position = '';
+        levelSelectionElement.style.width = '';
+        levelSelectionElement.style.minHeight = '';
+        levelSelectionElement.style.backgroundColor = '';
+        levelSelectionElement.style.padding = '';
+        levelSelectionElement.style.boxSizing = '';
+    }
+    
+    if (testResultsElement) testResultsElement.style.display = 'none';
+    if (testMonitoringElement) testMonitoringElement.style.display = 'none';
+    
+    // Show other sections
+    if (featuresSection) featuresSection.style.display = '';
+    if (aboutSection) aboutSection.style.display = '';
+    if (howItWorksSection) howItWorksSection.style.display = '';
+    
+    // Reset page state
+    window.scrollTo(0, 0);
+    if (window.location.hash) {
+        history.pushState("", document.title, window.location.pathname + window.location.search);
+    }
+    
+    console.log('✅ Returned to home page - all test objects cleared');
 }
 
 // Global app state
@@ -702,9 +981,16 @@ function initEventListeners() {
     // Add event listeners for level selection buttons (delegate to handle dynamic content)
     document.addEventListener('click', function(e) {
         if (e.target.matches('.level-btn')) {
+            console.log('🔘 Level button clicked!', e.target);
             const levelCard = e.target.closest('.level-card');
             const level = levelCard ? levelCard.dataset.level : 'medium';
-            console.log('Level button clicked:', level, 'mode:', appMode);
+            console.log('Level extracted:', level, 'from card:', levelCard);
+            console.log('Current app mode:', appMode);
+            
+            // Prevent any default behavior
+            e.preventDefault();
+            e.stopPropagation();
+            
             handleLevelButtonClick(level);
         }
         
@@ -792,6 +1078,23 @@ function handleLevelButtonClick(level) {
         isTestRunning: isTestRunning
     });
     
+    if (isTestRunning) {
+        console.warn('⚠️ Test already running, ignoring level button click');
+        return;
+    }
+    
+    // Force app mode if it's still loading
+    if (appMode === 'loading') {
+        console.log('🔄 App still loading, checking capabilities...');
+        if (typeof THREE !== 'undefined' && scene) {
+            appMode = '3d';
+            console.log('✅ Switching to 3D mode');
+        } else {
+            appMode = '2d';
+            console.log('✅ Switching to 2D fallback mode');
+        }
+    }
+    
     if (appMode === '3d') {
         console.log('✅ Starting 3D GPU test');
         startGPUTest(level);
@@ -800,7 +1103,10 @@ function handleLevelButtonClick(level) {
         startFallbackTest(level);
     } else {
         console.error('❌ Invalid app mode for level test:', appMode);
-        showError('Test mode not available. Please refresh the page.');
+        // Force to 2D mode as fallback
+        console.log('🔄 Forcing 2D mode as fallback...');
+        appMode = '2d';
+        startFallbackTest(level);
     }
 }
 
@@ -889,9 +1195,9 @@ function showLoadingMessage() {
 // 2D Fallback Mode Functions
 function showFallbackLevelSelection() {
     console.log('Showing 2D fallback level selection');
-    document.querySelector('.hero').style.display = 'none';
-    document.querySelector('.level-selection').style.display = 'block';
-    document.querySelector('.test-results').style.display = 'none';
+    
+    // Use the same logic as 3D mode
+    showLevelSelection();
     
     // Update level selection descriptions for 2D mode
     const levelCards = document.querySelectorAll('.level-card');
@@ -1007,7 +1313,10 @@ function start2DAnimation(level) {
     const animationArea = document.getElementById('animation-area');
     
     console.log(`Starting 2D animation test with ${elementCount} elements`);
-    document.getElementById('fallback-elements').textContent = elementCount;
+    const fallbackElementsEl = document.getElementById('fallback-elements');
+    if (fallbackElementsEl) {
+        fallbackElementsEl.textContent = elementCount;
+    }
     
     // Create animated elements
     for (let i = 0; i < elementCount; i++) {
@@ -1040,9 +1349,16 @@ function updateFallbackTest() {
     const remaining = Math.max(0, testDuration - Math.floor(elapsed / 1000));
     const progress = ((testDuration - remaining) / testDuration) * 100;
     
-    // Update UI
-    document.getElementById('fallback-time').textContent = remaining + 's';
-    document.getElementById('fallback-progress').style.width = progress + '%';
+    // Update UI with null checks
+    const fallbackTimeEl = document.getElementById('fallback-time');
+    const fallbackProgressEl = document.getElementById('fallback-progress');
+    
+    if (fallbackTimeEl) {
+        fallbackTimeEl.textContent = remaining + 's';
+    }
+    if (fallbackProgressEl) {
+        fallbackProgressEl.style.width = progress + '%';
+    }
     
     // Calculate "FPS" based on requestAnimationFrame callback frequency
     frameCount++;
@@ -1050,7 +1366,10 @@ function updateFallbackTest() {
     
     if (now - lastFPSUpdate >= 1000) {
         const fps = Math.round(frameCount / ((now - lastFPSUpdate) / 1000));
-        document.getElementById('fallback-fps').textContent = fps;
+        const fallbackFpsEl = document.getElementById('fallback-fps');
+        if (fallbackFpsEl) {
+            fallbackFpsEl.textContent = fps;
+        }
         
         // Track performance metrics
         testResults.minFPS = Math.min(testResults.minFPS, fps);
@@ -1102,16 +1421,26 @@ function stopFallbackTest() {
 
 // Show 2D test results
 function show2DTestResults() {
-    // Update results display
-    document.getElementById('completed-level').textContent = testLevels[currentLevel].name + ' (2D Mode)';
-    document.getElementById('completion-time').textContent = new Date().toLocaleTimeString();
-    document.getElementById('final-score').textContent = testResults.score;
-    document.getElementById('result-avg-fps').textContent = testResults.avgFPS;
-    document.getElementById('result-min-fps').textContent = testResults.minFPS === Infinity ? 0 : testResults.minFPS;
-    document.getElementById('result-max-fps').textContent = testResults.maxFPS;
-    document.getElementById('result-objects').textContent = testLevels[currentLevel].objects;
-    document.getElementById('result-gpu-temp').textContent = '65°C'; // Static for 2D mode
-    document.getElementById('result-stability').textContent = testResults.stability + '%';
+    // Update results display with null checks
+    const completedLevelEl = document.getElementById('completed-level');
+    const completionTimeEl = document.getElementById('completion-time');
+    const finalScoreEl = document.getElementById('final-score');
+    const resultAvgFpsEl = document.getElementById('result-avg-fps');
+    const resultMinFpsEl = document.getElementById('result-min-fps');
+    const resultMaxFpsEl = document.getElementById('result-max-fps');
+    const resultObjectsEl = document.getElementById('result-objects');
+    const resultGpuTempEl = document.getElementById('result-gpu-temp');
+    const resultStabilityEl = document.getElementById('result-stability');
+    
+    if (completedLevelEl) completedLevelEl.textContent = testLevels[currentLevel].name + ' (2D Mode)';
+    if (completionTimeEl) completionTimeEl.textContent = new Date().toLocaleTimeString();
+    if (finalScoreEl) finalScoreEl.textContent = testResults.score;
+    if (resultAvgFpsEl) resultAvgFpsEl.textContent = testResults.avgFPS;
+    if (resultMinFpsEl) resultMinFpsEl.textContent = testResults.minFPS === Infinity ? 0 : testResults.minFPS;
+    if (resultMaxFpsEl) resultMaxFpsEl.textContent = testResults.maxFPS;
+    if (resultObjectsEl) resultObjectsEl.textContent = testLevels[currentLevel].objects;
+    if (resultGpuTempEl) resultGpuTempEl.textContent = '65°C'; // Static for 2D mode
+    if (resultStabilityEl) resultStabilityEl.textContent = testResults.stability + '%';
     
     // Update score rating with 2D mode note
     const scoreRating = document.getElementById('score-rating');
@@ -1213,7 +1542,10 @@ function initCookieConsent() {
 
 // Show social sharing buttons after test completion
 function showSocialSharing() {
-    document.getElementById('share').style.display = 'block';
+    const shareEl = document.getElementById('share');
+    if (shareEl) {
+        shareEl.style.display = 'block';
+    }
 }
 
 // Enhanced Three.js loading detection
@@ -1527,6 +1859,110 @@ window.addEventListener('threejs-failed', () => {
     showThreeJSError('Failed to load Three.js library from all CDN sources.');
 });
 
+// Debug function to test home navigation (can be called from console)
+window.debugTestHomeNavigation = function() {
+    console.log('🧪 TESTING HOME NAVIGATION');
+    console.log('Current state before home navigation:', {
+        isTestRunning: isTestRunning,
+        testObjectsCount: testObjects.length,
+        animationId: animationId,
+        fallbackAnimationId: fallbackAnimationId,
+        sceneChildren: scene ? scene.children.length : 'No scene',
+        appMode: appMode,
+        currentLevel: currentLevel
+    });
+    
+    showHomePage();
+    
+    setTimeout(() => {
+        console.log('State after home navigation:', {
+            isTestRunning: isTestRunning,
+            testObjectsCount: testObjects.length,
+            animationId: animationId,
+            fallbackAnimationId: fallbackAnimationId,
+            sceneChildren: scene ? scene.children.length : 'No scene',
+            heroDisplay: document.querySelector('.hero')?.style.display,
+            levelSelectionDisplay: document.querySelector('.level-selection')?.style.display,
+            testResultsDisplay: document.querySelector('.test-results')?.style.display,
+            testCanvasDisplay: document.getElementById('test-canvas')?.style.display,
+            appMode: appMode
+        });
+        
+        console.log('DOM Elements Check:');
+        console.log('- test-canvas exists:', !!document.getElementById('test-canvas'));
+        console.log('- objects-display exists:', !!document.getElementById('objects-display'));
+        console.log('- object-count exists:', !!document.getElementById('object-count'));
+    }, 100);
+};
+
+// ULTIMATE FIX: Force all buttons to work
+window.forceFixAllButtons = function() {
+    console.log('🚨 ULTIMATE FIX: Forcing all buttons to work...');
+    
+    // Fix main start button
+    const startBtn = document.querySelector('.start-test-btn');
+    if (startBtn) {
+        startBtn.onclick = function(e) {
+            e.preventDefault();
+            showLevelSelection();
+            setTimeout(addEmergencyLevelButtonHandlers, 100);
+        };
+        console.log('✅ Start button fixed');
+    }
+    
+    // Fix level buttons
+    addEmergencyLevelButtonHandlers();
+    
+    // Fix navigation buttons
+    const homeBtn = document.querySelector('.home-btn');
+    const backBtn = document.querySelector('.back-btn');
+    const newLevelBtn = document.querySelector('.new-level-btn');
+    
+    if (homeBtn) {
+        homeBtn.onclick = function(e) {
+            e.preventDefault();
+            showHomePage();
+        };
+    }
+    
+    if (backBtn) {
+        backBtn.onclick = function(e) {
+            e.preventDefault();
+            showHomePage();
+        };
+    }
+    
+    if (newLevelBtn) {
+        newLevelBtn.onclick = function(e) {
+            e.preventDefault();
+            showLevelSelection();
+            setTimeout(addEmergencyLevelButtonHandlers, 100);
+        };
+    }
+    
+    console.log('✅ All buttons force-fixed');
+};
+
+// Debug function to monitor function calls
+window.debugMonitorCalls = function() {
+    const originalStartGPUTest = window.startGPUTest || startGPUTest;
+    const originalCreateStressTestObjects = window.createStressTestObjects || createStressTestObjects;
+    
+    window.startGPUTest = function(...args) {
+        console.log('🚨 DEBUG: startGPUTest called with:', args);
+        console.trace('Call stack:');
+        return originalStartGPUTest.apply(this, args);
+    };
+    
+    window.createStressTestObjects = function(...args) {
+        console.log('🚨 DEBUG: createStressTestObjects called');
+        console.trace('Call stack:');
+        return originalCreateStressTestObjects.apply(this, args);
+    };
+    
+    console.log('✅ Function monitoring enabled');
+};
+
 // Debug function for manual button testing (can be called from console)
 window.debugButtonTest = function() {
     console.log('🧪 Manual button test initiated...');
@@ -1836,6 +2272,58 @@ function checkFunctionExists(funcName) {
     }
 }
 
+// EMERGENCY LEVEL BUTTON HANDLER
+function addEmergencyLevelButtonHandlers() {
+    console.log('🚨 Adding emergency level button handlers...');
+    
+    const levelButtons = document.querySelectorAll('.level-btn');
+    console.log(`Found ${levelButtons.length} level buttons`);
+    
+    levelButtons.forEach((btn, index) => {
+        const levelCard = btn.closest('.level-card');
+        const level = levelCard ? levelCard.dataset.level : 'medium';
+        
+        console.log(`Setting up emergency handler for button ${index + 1}: ${level}`);
+        
+        // Remove existing handlers and add new one
+        btn.onclick = function(e) {
+            console.log(`🚨 EMERGENCY HANDLER: ${level} button clicked!`);
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Force start the appropriate test
+            if (typeof startGPUTest === 'function' && (typeof THREE !== 'undefined' && scene)) {
+                console.log('Starting 3D test...');
+                currentLevel = level;
+                isTestRunning = true;
+                startGPUTest(level);
+            } else {
+                console.log('Starting 2D test...');
+                currentLevel = level;
+                isTestRunning = true;
+                startFallbackTest(level);
+            }
+            
+            return false;
+        };
+        
+        // Also add event listener as backup
+        btn.addEventListener('click', function(e) {
+            console.log(`🔧 BACKUP HANDLER: ${level} button clicked!`);
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (typeof startGPUTest === 'function' && (typeof THREE !== 'undefined' && scene)) {
+                startGPUTest(level);
+            } else {
+                startFallbackTest(level);
+            }
+        }, true);
+    });
+    
+    console.log('✅ Emergency level button handlers added');
+}
+
 // IMMEDIATE SIMPLE FIX: Add event listener as soon as possible
 function addSimpleButtonHandler() {
     const btn = document.getElementById('simple-start-btn') || document.querySelector('.start-test-btn');
@@ -1867,6 +2355,9 @@ function addSimpleButtonHandler() {
             const aboutSection = document.querySelector('#about');
             if (aboutSection) aboutSection.remove();
             
+            // Add level button handlers immediately
+            addEmergencyLevelButtonHandlers();
+            
             console.log('✅ SIMPLE: Level selection should be visible');
             return false;
         };
@@ -1892,9 +2383,47 @@ const intervalId = setInterval(() => {
     attempts++;
 }, 500);
 
+// CRITICAL: Add emergency level button handlers as soon as possible
+function initializeEmergencyHandlers() {
+    console.log('🚨 Initializing emergency handlers...');
+    
+    // Set level button handlers
+    setTimeout(() => {
+        addEmergencyLevelButtonHandlers();
+    }, 1000);
+    
+    // Set interval to keep trying
+    let attempts = 0;
+    const intervalId = setInterval(() => {
+        const levelButtons = document.querySelectorAll('.level-btn');
+        if (levelButtons.length > 0 && attempts < 5) {
+            addEmergencyLevelButtonHandlers();
+            console.log(`✅ Emergency handlers set (attempt ${attempts + 1})`);
+        }
+        
+        attempts++;
+        if (attempts >= 10) {
+            clearInterval(intervalId);
+        }
+    }, 2000);
+}
+
 // Wait for DOM to load
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 DOM fully loaded, starting comprehensive debugging...');
+    
+    // Initialize emergency handlers immediately
+    initializeEmergencyHandlers();
+    
+    // Force fix all buttons after a short delay
+    setTimeout(() => {
+        console.log('🚨 Calling forceFixAllButtons after DOM load...');
+        if (typeof forceFixAllButtons === 'function') {
+            forceFixAllButtons();
+        } else {
+            window.forceFixAllButtons();
+        }
+    }, 2000);
     
     // Check critical function existence
     console.log('🔍 Checking critical function existence:');

@@ -1642,6 +1642,35 @@ window.debugClickStart = function() {
     }
 };
 
+// SUPER SIMPLE TEST FUNCTION
+window.simpleTest = function() {
+    console.log('🧪 SUPER SIMPLE TEST - Showing level selection directly');
+    
+    // Hide everything except level selection
+    document.querySelectorAll('*').forEach(el => {
+        if (!el.classList.contains('level-selection') && !el.closest('.level-selection')) {
+            el.style.display = 'none';
+        }
+    });
+    
+    // Show level selection as overlay
+    const levelSelection = document.querySelector('.level-selection');
+    if (levelSelection) {
+        levelSelection.style.display = 'block';
+        levelSelection.style.position = 'fixed';
+        levelSelection.style.top = '0';
+        levelSelection.style.left = '0';
+        levelSelection.style.width = '100vw';
+        levelSelection.style.height = '100vh';
+        levelSelection.style.backgroundColor = '#1a1a1a';
+        levelSelection.style.zIndex = '999999';
+        levelSelection.style.overflow = 'auto';
+        levelSelection.style.padding = '20px';
+        
+        console.log('✅ Level selection forced to fullscreen overlay');
+    }
+};
+
 // DIRECT INLINE FUNCTION for HTML onclick (works with file:// protocol)
 window.forceShowLevelSelection = function(event) {
     console.log('🚨 ULTIMATE FIX: DIRECT INLINE FUNCTION CALLED - STOPPING ALL NAVIGATION');
@@ -1807,6 +1836,62 @@ function checkFunctionExists(funcName) {
     }
 }
 
+// IMMEDIATE SIMPLE FIX: Add event listener as soon as possible
+function addSimpleButtonHandler() {
+    const btn = document.getElementById('simple-start-btn') || document.querySelector('.start-test-btn');
+    if (btn) {
+        console.log('🎯 SIMPLE: Adding immediate button handler');
+        btn.onclick = function(e) {
+            console.log('🚨 SIMPLE HANDLER: Button clicked!');
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Simple direct DOM manipulation
+            const hero = document.querySelector('.hero');
+            const levelSelection = document.querySelector('.level-selection');
+            
+            if (hero) hero.style.display = 'none';
+            if (levelSelection) {
+                levelSelection.style.display = 'block';
+                levelSelection.style.position = 'fixed';
+                levelSelection.style.top = '0';
+                levelSelection.style.left = '0';
+                levelSelection.style.width = '100%';
+                levelSelection.style.height = '100vh';
+                levelSelection.style.backgroundColor = '#1a1a1a';
+                levelSelection.style.zIndex = '10000';
+                levelSelection.style.overflow = 'auto';
+            }
+            
+            // Hide about section completely
+            const aboutSection = document.querySelector('#about');
+            if (aboutSection) aboutSection.remove();
+            
+            console.log('✅ SIMPLE: Level selection should be visible');
+            return false;
+        };
+        console.log('✅ SIMPLE: Button handler added successfully');
+        return true;
+    }
+    return false;
+}
+
+// Try to add handler immediately
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', addSimpleButtonHandler);
+} else {
+    addSimpleButtonHandler();
+}
+
+// Also try every 500ms for first 5 seconds
+let attempts = 0;
+const intervalId = setInterval(() => {
+    if (addSimpleButtonHandler() || attempts > 10) {
+        clearInterval(intervalId);
+    }
+    attempts++;
+}, 500);
+
 // Wait for DOM to load
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 DOM fully loaded, starting comprehensive debugging...');
@@ -1824,9 +1909,11 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('  - debugForceEventBinding() - Emergency event binding');
     console.log('  - debugShowLevelSelection() - Force show level selection');
     console.log('  - debugClickStart() - Simulate start button click');
+    console.log('  - simpleTest() - SIMPLE OVERLAY TEST');
     console.log('🎯 To test immediately, type: debugButtonTest()');
     console.log('🚨 If button shows About page: debugShowLevelSelection()');
     console.log('⚡ Quick test: debugClickStart()');
+    console.log('🚀 SIMPLE OVERLAY: simpleTest()');
     
     console.log('📊 DOM Load Status:', {
         readyState: document.readyState,

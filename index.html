@@ -121,24 +121,58 @@
                     </div>
                 </div>
                 
-                <button id="simple-start-btn" class="start-test-btn" type="button" onclick="
-                    console.log('BASIC: Button clicked inline!');
-                    document.querySelector('.hero').style.display='none';
+                <a href="javascript:void(0);" class="start-test-btn" style="display: inline-block; padding: 18px 40px; background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%); color: #000000; text-decoration: none; border-radius: 50px; font-weight: 600; font-size: 1.25rem; border: none; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);" onclick="
+                    console.log('🔥 LINK: JavaScript link clicked!');
+                    event.preventDefault();
+                    event.stopPropagation();
+                    
+                    // Hide hero
+                    var hero = document.querySelector('.hero');
+                    if(hero) {
+                        hero.style.display = 'none';
+                        console.log('✅ Hero hidden');
+                    }
+                    
+                    // Show level selection as fullscreen overlay
                     var ls = document.querySelector('.level-selection');
-                    ls.style.display='block';
-                    ls.style.position='fixed';
-                    ls.style.top='0';
-                    ls.style.left='0';
-                    ls.style.width='100vw';
-                    ls.style.height='100vh';
-                    ls.style.backgroundColor='#1a1a1a';
-                    ls.style.zIndex='99999';
-                    ls.style.overflow='auto';
-                    ls.style.padding='20px';
-                    var about = document.querySelector('#about');
-                    if(about) about.remove();
+                    if(ls) {
+                        ls.style.display = 'block';
+                        ls.style.position = 'fixed';
+                        ls.style.top = '0';
+                        ls.style.left = '0';
+                        ls.style.width = '100vw';
+                        ls.style.height = '100vh';
+                        ls.style.backgroundColor = '#1a1a1a';
+                        ls.style.zIndex = '999999';
+                        ls.style.overflow = 'auto';
+                        ls.style.padding = '20px';
+                        console.log('✅ Level selection shown as overlay');
+                        
+                        // Make content visible
+                        var container = ls.querySelector('.container');
+                        if(container) {
+                            container.style.color = 'white';
+                            container.style.maxWidth = '1200px';
+                            container.style.margin = '0 auto';
+                            container.style.paddingTop = '50px';
+                        }
+                    }
+                    
+                    // Remove about section to prevent any scrolling
+                    var about = document.querySelector('#about, .about-section');
+                    if(about) {
+                        about.remove();
+                        console.log('✅ About section removed');
+                    }
+                    
+                    // Clear any hash in URL
+                    if(window.location.hash) {
+                        window.location.hash = '';
+                    }
+                    
+                    console.log('🎉 Link handler completed successfully!');
                     return false;
-                ">Start GPU Test</button>
+                ">Start GPU Test</a>
                 
                 <!-- Social Sharing Buttons -->
                 <div class="social-share" id="share" style="display: none;">
@@ -586,6 +620,7 @@
                     container.style.maxWidth = '1200px';
                     container.style.margin = '0 auto';
                     container.style.color = 'white';
+                    container.style.paddingTop = '50px';
                 }
             }
             
@@ -597,10 +632,22 @@
             }
         }
         
-        // Make it globally available
-        window.superSimpleTest = superSimpleTest;
+        // BYPASS OPTION: Show level selection immediately on load
+        function showLevelsImmediately() {
+            console.log('🚀 BYPASSING START PAGE - SHOWING LEVELS IMMEDIATELY');
+            setTimeout(function() {
+                superSimpleTest();
+            }, 500);
+        }
         
-        console.log('🔥 Inline script loaded! Type superSimpleTest() to test');
+        // Make functions globally available
+        window.superSimpleTest = superSimpleTest;
+        window.showLevelsImmediately = showLevelsImmediately;
+        
+        console.log('🔥 Inline script loaded!');
+        console.log('💡 Available functions:');
+        console.log('  - superSimpleTest() - Show level selection overlay');
+        console.log('  - showLevelsImmediately() - Bypass start page completely');
     </script>
     
     <!-- Main application script - loads after DOM is ready -->

@@ -121,64 +121,16 @@
                     </div>
                 </div>
                 
-                <!-- Auto-start message -->
-                <div style="background: #2a2a2a; padding: 15px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #00ff88;">
-                    <p style="margin: 0; color: #00ff88; font-weight: 600;">🚀 自动启动模式</p>
-                    <p style="margin: 5px 0 0 0; color: #cccccc; font-size: 0.9rem;">由于按钮点击问题，页面将在2秒后自动显示测试选择界面。</p>
-                </div>
-                
-                <a href="javascript:void(0);" class="start-test-btn" style="display: inline-block; padding: 18px 40px; background: linear-gradient(135deg, #666666 0%, #555555 100%); color: #cccccc; text-decoration: none; border-radius: 50px; font-weight: 600; font-size: 1.25rem; border: none; cursor: not-allowed; transition: all 0.3s ease; opacity: 0.6;" onclick="
-                    console.log('🔥 LINK: JavaScript link clicked!');
+                <button class="start-test-btn" type="button" onclick="
+                    console.log('🎯 GREEN BUTTON CLICKED!');
                     event.preventDefault();
                     event.stopPropagation();
                     
-                    // Hide hero
-                    var hero = document.querySelector('.hero');
-                    if(hero) {
-                        hero.style.display = 'none';
-                        console.log('✅ Hero hidden');
-                    }
+                    // Use the working display logic
+                    superSimpleTest();
                     
-                    // Show level selection as fullscreen overlay
-                    var ls = document.querySelector('.level-selection');
-                    if(ls) {
-                        ls.style.display = 'block';
-                        ls.style.position = 'fixed';
-                        ls.style.top = '0';
-                        ls.style.left = '0';
-                        ls.style.width = '100vw';
-                        ls.style.height = '100vh';
-                        ls.style.backgroundColor = '#1a1a1a';
-                        ls.style.zIndex = '999999';
-                        ls.style.overflow = 'auto';
-                        ls.style.padding = '20px';
-                        console.log('✅ Level selection shown as overlay');
-                        
-                        // Make content visible
-                        var container = ls.querySelector('.container');
-                        if(container) {
-                            container.style.color = 'white';
-                            container.style.maxWidth = '1200px';
-                            container.style.margin = '0 auto';
-                            container.style.paddingTop = '50px';
-                        }
-                    }
-                    
-                    // Remove about section to prevent any scrolling
-                    var about = document.querySelector('#about, .about-section');
-                    if(about) {
-                        about.remove();
-                        console.log('✅ About section removed');
-                    }
-                    
-                    // Clear any hash in URL
-                    if(window.location.hash) {
-                        window.location.hash = '';
-                    }
-                    
-                    console.log('🎉 Link handler completed successfully!');
                     return false;
-                ">Start GPU Test</a>
+                ">Start GPU Test</button>
                 
                 <!-- Social Sharing Buttons -->
                 <div class="social-share" id="share" style="display: none;">
@@ -698,22 +650,26 @@
             }, 500);
         }
         
+        // TEST FUNCTION: Show levels immediately for testing
+        function testShowLevels() {
+            console.log('🧪 TEST: Showing 4 test levels immediately');
+            superSimpleTest();
+        }
+        
         // Make functions globally available
         window.superSimpleTest = superSimpleTest;
         window.showLevelsImmediately = showLevelsImmediately;
+        window.testShowLevels = testShowLevels;
         
         console.log('🔥 Inline script loaded!');
         console.log('💡 Available functions:');
         console.log('  - superSimpleTest() - Show level selection overlay');
         console.log('  - showLevelsImmediately() - Bypass start page completely');
+        console.log('  - testShowLevels() - TEST: Show 4 levels immediately');
         
-        // AUTO-START: Automatically show level selection after page loads
-        console.log('🚀 AUTO-START: Will automatically show level selection in 2 seconds');
-        console.log('   This bypasses the broken button click issue');
-        setTimeout(function() {
-            console.log('🔥 AUTO-START: Activating level selection now!');
-            superSimpleTest();
-        }, 2000);
+        // AUTO-START REMOVED: Green button now works correctly
+        console.log('🎯 Green button is now functional - no auto-start needed');
+        console.log('💡 Click the green "Start GPU Test" button to begin');
     </script>
     
     <!-- Main application script - loads after DOM is ready -->

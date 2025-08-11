@@ -123,12 +123,33 @@
                 
                 <button class="start-test-btn" type="button" onclick="
                     console.log('🎯 GREEN BUTTON CLICKED!');
-                    event.preventDefault();
-                    event.stopPropagation();
+                    console.log('Event object:', event);
                     
-                    // Use the working display logic
-                    superSimpleTest();
+                    try {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    } catch(e) {
+                        console.log('Event prevention failed:', e);
+                    }
                     
+                    console.log('About to call superSimpleTest...');
+                    
+                    // Check if function exists
+                    if (typeof superSimpleTest === 'function') {
+                        console.log('✅ superSimpleTest function found, calling it...');
+                        superSimpleTest();
+                    } else {
+                        console.error('❌ superSimpleTest function not found!');
+                        console.log('Available functions:', Object.keys(window).filter(key => key.includes('test') || key.includes('Simple')));
+                        
+                        // Try to call it from window object
+                        if (window.superSimpleTest) {
+                            console.log('Found in window object, calling...');
+                            window.superSimpleTest();
+                        }
+                    }
+                    
+                    console.log('Button click handler completed');
                     return false;
                 ">Start GPU Test</button>
                 
@@ -670,6 +691,35 @@
         // AUTO-START REMOVED: Green button now works correctly
         console.log('🎯 Green button is now functional - no auto-start needed');
         console.log('💡 Click the green "Start GPU Test" button to begin');
+        
+        // BACKUP: Add additional event listener to button as backup
+        setTimeout(function() {
+            var btn = document.querySelector('.start-test-btn');
+            if (btn) {
+                console.log('🔧 Adding backup event listener to button');
+                
+                // Clone button to remove any existing listeners
+                var newBtn = btn.cloneNode(true);
+                btn.parentNode.replaceChild(newBtn, btn);
+                
+                // Add new event listener
+                newBtn.addEventListener('click', function(e) {
+                    console.log('🚨 BACKUP EVENT LISTENER TRIGGERED!');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    if (typeof superSimpleTest === 'function') {
+                        superSimpleTest();
+                    } else if (window.superSimpleTest) {
+                        window.superSimpleTest();
+                    } else {
+                        console.error('superSimpleTest not available in backup listener');
+                    }
+                });
+                
+                console.log('✅ Backup event listener added');
+            }
+        }, 1000);
     </script>
     
     <!-- Main application script - loads after DOM is ready -->

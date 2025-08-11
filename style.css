@@ -1366,3 +1366,21 @@ footer p {
 .hero[style*="display: none"] {
     display: none !important;
 }
+
+/* Hide about section when level selection is active */
+.level-selection[style*="display: block"] ~ * .about-section,
+.about-section[style*="display: none"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* Prevent any scrolling to about section */
+.about-section {
+    scroll-margin-top: 0;
+}
+
+/* Force level selection to top when active */
+.level-selection[style*="display: block"] {
+    margin-top: 0 !important;
+    padding-top: 50px !important;
+}

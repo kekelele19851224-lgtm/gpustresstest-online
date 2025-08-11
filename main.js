@@ -1643,58 +1643,102 @@ window.debugClickStart = function() {
 };
 
 // DIRECT INLINE FUNCTION for HTML onclick (works with file:// protocol)
-window.forceShowLevelSelection = function() {
-    console.log('🚨 DIRECT INLINE FUNCTION CALLED - FORCING LEVEL SELECTION');
+window.forceShowLevelSelection = function(event) {
+    console.log('🚨 ULTIMATE FIX: DIRECT INLINE FUNCTION CALLED - STOPPING ALL NAVIGATION');
     
     try {
-        // Prevent any navigation
+        // CRITICAL: Prevent any navigation or scrolling immediately
         if (event) {
             event.preventDefault();
             event.stopPropagation();
+            event.stopImmediatePropagation();
         }
         
-        // Force hide main hero section
+        // CRITICAL: Remove #about from URL immediately to prevent scroll
+        if (window.location.hash === '#about' || window.location.href.includes('#about')) {
+            console.log('🔧 Removing #about from URL');
+            history.replaceState(null, null, window.location.pathname + window.location.search);
+        }
+        
+        // CRITICAL: Force scroll to top immediately
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        
+        console.log('🎯 FORCING PAGE STRUCTURE CHANGE');
+        
+        // Hide ALL sections first
+        const allSections = document.querySelectorAll('section, .hero, .test-results, .test-monitoring');
+        allSections.forEach(section => {
+            if (!section.classList.contains('level-selection')) {
+                section.style.display = 'none';
+            }
+        });
+        
+        // Force hide main hero section specifically
         const hero = document.querySelector('.hero');
         if (hero) {
             hero.style.display = 'none';
-            console.log('✅ Hero section hidden');
+            hero.style.visibility = 'hidden';
+            console.log('✅ Hero section completely hidden');
         }
         
-        // Force show level selection with all CSS overrides
+        // Hide the about section specifically to prevent scroll
+        const aboutSection = document.querySelector('#about, .about-section');
+        if (aboutSection) {
+            aboutSection.style.display = 'none';
+            aboutSection.style.visibility = 'hidden';
+            console.log('✅ About section hidden to prevent scroll');
+        }
+        
+        // Force show level selection with maximum priority
         const levelSelection = document.querySelector('.level-selection');
         if (levelSelection) {
             levelSelection.style.display = 'block';
             levelSelection.style.visibility = 'visible';
             levelSelection.style.opacity = '1';
             levelSelection.style.position = 'relative';
-            levelSelection.style.zIndex = '1000';
-            console.log('✅ Level selection shown with full visibility');
+            levelSelection.style.zIndex = '9999';
+            levelSelection.style.marginTop = '0';
+            levelSelection.style.paddingTop = '50px';
+            
+            // Make sure it's at the top of the page
+            levelSelection.scrollIntoView({ behavior: 'instant', block: 'start' });
+            
+            console.log('✅ Level selection shown with maximum visibility');
         } else {
             console.error('❌ Level selection not found');
             return false;
         }
         
-        // Hide other competing sections
-        const testResults = document.querySelector('.test-results');
-        if (testResults) testResults.style.display = 'none';
+        // FINAL: Ensure scroll stays at top
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            console.log('✅ Final scroll reset applied');
+        }, 50);
         
-        const testMonitoring = document.querySelector('.test-monitoring');
-        if (testMonitoring) testMonitoring.style.display = 'none';
+        console.log('✅ ULTIMATE FIX APPLIED: Level selection should now be visible at top!');
         
-        // Clear any URL hash and scroll issues
-        if (window.location.hash) {
-            window.location.hash = '';
+        // NUCLEAR OPTION: Move level selection to very top of page
+        if (levelSelection && levelSelection.parentNode) {
+            const body = document.body;
+            const firstChild = body.firstChild;
+            if (levelSelection.parentNode !== body) {
+                body.insertBefore(levelSelection, firstChild);
+                console.log('🚀 NUCLEAR: Moved level selection to top of body');
+            }
         }
-        window.scrollTo(0, 0);
         
-        console.log('✅ DIRECT FUNCTION: Level selection should now be visible!');
-        
-        // Verify and report final state
+        // Verify final state
         console.log('🔍 Final state verification:', {
-            heroVisible: hero?.style.display !== 'none',
-            levelSelectionVisible: levelSelection?.style.display === 'block',
             currentURL: window.location.href,
-            scrollTop: window.scrollY
+            scrollTop: window.scrollY,
+            heroHidden: hero?.style.display === 'none',
+            levelSelectionVisible: levelSelection?.style.display === 'block',
+            aboutHidden: aboutSection?.style.display === 'none',
+            levelSelectionParent: levelSelection?.parentNode?.tagName
         });
         
         return false; // Prevent any default action

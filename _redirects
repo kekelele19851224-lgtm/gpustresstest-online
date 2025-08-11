@@ -1,0 +1,13 @@
+# Redirects for Cloudflare Pages
+
+# Force HTTPS
+http://gpustresstest.online/* https://gpustresstest.online/:splat 301!
+http://www.gpustresstest.online/* https://gpustresstest.online/:splat 301!
+
+# Remove www
+https://www.gpustresstest.online/* https://gpustresstest.online/:splat 301!
+
+# Legacy redirects (if any)
+/test /  301
+/benchmark /  301
+/gpu-test /  301

@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://gpustresstest.online/sitemap.xml
+
+# Disallow admin areas (if any)
+Disallow: /admin/
+Disallow: /*.json$
+
+# Allow important files
+Allow: /favicon.ico
+Allow: /apple-touch-icon.png
+Allow: /og-image.jpg
+Allow: /twitter-card.jpg
+
+# Crawl delay (optional - be respectful to search engines)
+Crawl-delay: 1

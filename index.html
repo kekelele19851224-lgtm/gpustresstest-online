@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Free GPU Stress Test Online | Graphics Card Performance Testing | gpustresstest.online</title>
+    <meta name="description" content="Test your graphics card with our free online GPU stress test. Benchmark GPU performance, monitor temperatures, and compare results. Works with all graphics cards.">
+    <meta name="keywords" content="GPU stress test, graphics card test, GPU benchmark online, video card test, free GPU test, graphics performance test, GPU temperature test">
+    <meta name="author" content="gpustresstest.online">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://gpustresstest.online/">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Free GPU Stress Test Online - Test Your Graphics Card Performance">
+    <meta property="og:description" content="Professional GPU stress testing tool. Test graphics card performance, monitor temperatures, and benchmark your video card for free.">
+    <meta property="og:url" content="https://gpustresstest.online/">
+    <meta property="og:site_name" content="GPU Stress Test Online">
+    <meta property="og:image" content="https://gpustresstest.online/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free GPU Stress Test Online - Test Your Graphics Card">
+    <meta name="twitter:description" content="Professional GPU stress testing tool. Benchmark your graphics card performance and monitor temperatures online.">
+    <meta name="twitter:image" content="https://gpustresstest.online/twitter-card.jpg">
+    <meta name="twitter:site" content="@gpustresstest">
+    
+    <!-- Technical Meta Tags -->
+    <meta name="theme-color" content="#00ff88">
+    <meta name="msapplication-TileColor" content="#00ff88">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://www.google-analytics.com">
+    <link rel="dns-prefetch" href="//pagead2.googlesyndication.com">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    
+    <!-- AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "GPU Stress Test Online",
+        "description": "Free online GPU stress testing tool to benchmark graphics card performance and monitor temperatures",
+        "url": "https://gpustresstest.online/",
+        "applicationCategory": "Utility",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "GPU Stress Test Online"
+        },
+        "keywords": [
+            "GPU stress test",
+            "graphics card test", 
+            "GPU benchmark",
+            "video card performance",
+            "GPU temperature monitoring"
+        ]
+    }
+    </script>
+
+    <header>
+        <div class="container">
+            <nav class="header-nav">
+                <h1 class="logo">
+                    <a href="/">gpustresstest.online</a>
+                </h1>
+                <div class="nav-links">
+                    <a href="#about">About</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#share" class="share-btn">Share</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1 class="hero-title">Test Your Graphics Card Performance</h1>
+                <p class="hero-description">
+                    Put your GPU to the ultimate test with our comprehensive stress testing suite. 
+                    Measure performance, monitor temperatures, and ensure your graphics card can handle 
+                    the most demanding workloads.
+                </p>
+                
+                <!-- Ad Placeholder - Hero Banner -->
+                <div class="ad-banner ad-hero" data-ad-slot="hero-banner">
+                    <div class="ad-placeholder">
+                        <span>Advertisement</span>
+                    </div>
+                </div>
+                
+                <button class="start-test-btn">Start GPU Test</button>
+                
+                <!-- Social Sharing Buttons -->
+                <div class="social-share" id="share" style="display: none;">
+                    <h3>Share Your Results</h3>
+                    <div class="share-buttons">
+                        <button class="share-btn twitter" onclick="shareOnTwitter()">
+                            <span class="share-icon">🐦</span> Twitter
+                        </button>
+                        <button class="share-btn facebook" onclick="shareOnFacebook()">
+                            <span class="share-icon">📘</span> Facebook
+                        </button>
+                        <button class="share-btn linkedin" onclick="shareOnLinkedIn()">
+                            <span class="share-icon">💼</span> LinkedIn
+                        </button>
+                        <button class="share-btn copy" onclick="copyLink()">
+                            <span class="share-icon">🔗</span> Copy Link
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Test Level Selection -->
+            <div class="level-selection" style="display: none;">
+                <div class="container">
+                    <h2>Select Test Level</h2>
+                    <p>Choose the intensity of your GPU stress test</p>
+                    <div class="level-grid">
+                        <div class="level-card" data-level="light">
+                            <div class="level-icon">🟢</div>
+                            <h3>Light Test</h3>
+                            <div class="level-stats">
+                                <span>50 Objects</span>
+                                <span>30 seconds</span>
+                            </div>
+                            <p>Perfect for basic GPU testing and older hardware</p>
+                            <button class="level-btn">Start Light Test</button>
+                        </div>
+                        <div class="level-card" data-level="medium">
+                            <div class="level-icon">🟡</div>
+                            <h3>Medium Test</h3>
+                            <div class="level-stats">
+                                <span>150 Objects</span>
+                                <span>30 seconds</span>
+                            </div>
+                            <p>Standard stress test for modern GPUs</p>
+                            <button class="level-btn">Start Medium Test</button>
+                        </div>
+                        <div class="level-card" data-level="heavy">
+                            <div class="level-icon">🟠</div>
+                            <h3>Heavy Test</h3>
+                            <div class="level-stats">
+                                <span>300 Objects</span>
+                                <span>30 seconds</span>
+                            </div>
+                            <p>Intensive testing for high-end graphics cards</p>
+                            <button class="level-btn">Start Heavy Test</button>
+                        </div>
+                        <div class="level-card" data-level="extreme">
+                            <div class="level-icon">🔴</div>
+                            <h3>Extreme Test</h3>
+                            <div class="level-stats">
+                                <span>500 Objects</span>
+                                <span>30 seconds</span>
+                            </div>
+                            <p>Maximum stress test for professional GPUs</p>
+                            <button class="level-btn">Start Extreme Test</button>
+                        </div>
+                    </div>
+                    <button class="back-btn">Back to Home</button>
+                </div>
+            </div>
+            
+            <canvas id="test-canvas" style="display: none;"></canvas>
+            
+            <!-- Test Monitoring Interface -->
+            <div class="test-monitoring" style="display: none;">
+                <div class="monitoring-sidebar">
+                    <div class="monitoring-header">
+                        <h3>Performance Monitor</h3>
+                        <div class="test-status">
+                            <span class="status-indicator" id="status-indicator"></span>
+                            <span id="status-text">Testing...</span>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-section">
+                        <div class="progress-info">
+                            <span>Test Progress</span>
+                            <span id="progress-time">30s</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="fps-display">0</div>
+                            <div class="stat-label">FPS</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="avg-fps-display">0</div>
+                            <div class="stat-label">Avg FPS</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="objects-display">0</div>
+                            <div class="stat-label">Objects</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="temp-display">65°C</div>
+                            <div class="stat-label">GPU Temp</div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-section">
+                        <h4>FPS Performance</h4>
+                        <div class="chart-container">
+                            <canvas id="fps-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="system-info">
+                        <h4>System Information</h4>
+                        <div class="info-item">
+                            <span class="info-label">GPU:</span>
+                            <span id="gpu-info">Detecting...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">WebGL:</span>
+                            <span id="webgl-version">2.0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Device:</span>
+                            <span id="device-type">Desktop</span>
+                        </div>
+                    </div>
+                    
+                    <div class="control-section">
+                        <button class="stop-test-btn">Stop Test</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Test Results Page -->
+            <div class="test-results" style="display: none;">
+                <div class="container">
+                    <div class="results-header">
+                        <h2>Test Results</h2>
+                        <div class="test-info">
+                            <span id="completed-level">Medium Test</span>
+                            <span id="completion-time">Completed</span>
+                        </div>
+                    </div>
+                    
+                    <div class="results-content">
+                        <div class="score-section">
+                            <div class="score-circle">
+                                <div class="score-value" id="final-score">85</div>
+                                <div class="score-label">Score</div>
+                            </div>
+                            <div class="score-rating" id="score-rating">Excellent</div>
+                        </div>
+                        
+                        <div class="results-grid">
+                            <div class="result-card">
+                                <div class="result-value" id="result-avg-fps">65</div>
+                                <div class="result-label">Average FPS</div>
+                            </div>
+                            <div class="result-card">
+                                <div class="result-value" id="result-min-fps">45</div>
+                                <div class="result-label">Min FPS</div>
+                            </div>
+                            <div class="result-card">
+                                <div class="result-value" id="result-max-fps">85</div>
+                                <div class="result-label">Max FPS</div>
+                            </div>
+                            <div class="result-card">
+                                <div class="result-value" id="result-objects">150</div>
+                                <div class="result-label">Objects</div>
+                            </div>
+                            <div class="result-card">
+                                <div class="result-value" id="result-gpu-temp">75°C</div>
+                                <div class="result-label">Max Temp</div>
+                            </div>
+                            <div class="result-card">
+                                <div class="result-value" id="result-stability">98%</div>
+                                <div class="result-label">Stability</div>
+                            </div>
+                        </div>
+                        
+                        <div class="results-comparison">
+                            <h4>Previous Tests</h4>
+                            <div class="comparison-list" id="previous-tests">
+                                <div class="comparison-item">No previous tests found</div>
+                            </div>
+                        </div>
+                        
+                        <div class="results-actions">
+                            <button class="test-again-btn">Test Again</button>
+                            <button class="new-level-btn">Try Different Level</button>
+                            <button class="home-btn">Back to Home</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ad Placeholder - Between Sections -->
+        <section class="ad-section">
+            <div class="container">
+                <div class="ad-banner ad-horizontal" data-ad-slot="horizontal-banner">
+                    <div class="ad-placeholder">
+                        <span>Advertisement</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <h3>Performance Testing</h3>
+                        <p>Comprehensive GPU benchmarking to measure your graphics card's capabilities</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Temperature Monitoring</h3>
+                        <p>Real-time monitoring of GPU temperature and thermal throttling detection</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Stability Testing</h3>
+                        <p>Extended stress tests to ensure your GPU remains stable under heavy loads</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about-section" id="about">
+            <div class="container">
+                <h2>About GPU Stress Test Online</h2>
+                <div class="about-content">
+                    <p>GPU Stress Test Online is a free, browser-based graphics card testing tool designed to help users evaluate their GPU performance safely and efficiently. Our advanced WebGL-based testing engine puts your graphics card through rigorous stress tests while monitoring key performance metrics.</p>
+                    
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <h4>🎯 Accurate Testing</h4>
+                            <p>Professional-grade stress testing algorithms designed to push your GPU to its limits while maintaining system stability.</p>
+                        </div>
+                        <div class="about-feature">
+                            <h4>📊 Real-time Monitoring</h4>
+                            <p>Monitor FPS, temperature, and stability metrics in real-time with beautiful charts and graphs.</p>
+                        </div>
+                        <div class="about-feature">
+                            <h4>🔒 Safe & Secure</h4>
+                            <p>No downloads required. Run directly in your browser with automatic safety limits to protect your hardware.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works" id="how-it-works">
+            <div class="container">
+                <h2>How It Works</h2>
+                <div class="steps-grid">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <h4>Choose Test Level</h4>
+                        <p>Select from Light, Medium, Heavy, or Extreme test levels based on your GPU capabilities.</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <h4>Start Testing</h4>
+                        <p>Our WebGL engine renders complex 3D scenes while monitoring your graphics card performance.</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <h4>View Results</h4>
+                        <p>Get detailed performance scores, FPS metrics, and temperature readings with historical comparisons.</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <h4>Share & Compare</h4>
+                        <p>Share your results on social media and compare with other users' GPU performance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ad Placeholder - Sidebar Style -->
+        <div class="ad-sidebar" data-ad-slot="sidebar">
+            <div class="ad-placeholder">
+                <span>Advertisement</span>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>GPU Stress Test Online</h4>
+                    <p>Free graphics card performance testing tool for all users.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Keywords</h4>
+                    <p>GPU benchmark, graphics card test, video card performance, GPU stress test, free online GPU testing</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 gpustresstest.online - Professional GPU Testing Suite</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cookie Consent Notice -->
+    <div class="cookie-consent" id="cookie-consent">
+        <div class="cookie-content">
+            <p>We use cookies to improve your experience and analyze site traffic. <a href="#privacy">Privacy Policy</a></p>
+            <div class="cookie-buttons">
+                <button class="cookie-accept">Accept All</button>
+                <button class="cookie-decline">Decline</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js Library with Multiple CDN Fallbacks -->
+    <script>
+        // Three.js loading configuration
+        window.threeJSConfig = {
+            loaded: false,
+            loading: false,
+            error: null,
+            version: 'r128',
+            cdnList: [
+                'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
+                'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js',
+                'https://unpkg.com/three@0.128.0/build/three.min.js'
+            ],
+            localBackup: './three.min.js' // Optional local backup
+        };
+        
+        // Dynamic script loading with fallback
+        function loadThreeJS(urls, callback) {
+            if (window.threeJSConfig.loading) return;
+            window.threeJSConfig.loading = true;
+            
+            let currentIndex = 0;
+            
+            function attemptLoad() {
+                if (currentIndex >= urls.length) {
+                    window.threeJSConfig.error = 'All CDN sources failed to load';
+                    window.threeJSConfig.loading = false;
+                    if (callback) callback(false);
+                    return;
+                }
+                
+                const script = document.createElement('script');
+                const url = urls[currentIndex];
+                
+                console.log(`Attempting to load Three.js from: ${url}`);
+                
+                script.onload = function() {
+                    if (typeof THREE !== 'undefined') {
+                        console.log(`Three.js loaded successfully from: ${url}`);
+                        window.threeJSConfig.loaded = true;
+                        window.threeJSConfig.loading = false;
+                        if (callback) callback(true);
+                    } else {
+                        console.warn(`Three.js script loaded but THREE object not found from: ${url}`);
+                        currentIndex++;
+                        attemptLoad();
+                    }
+                };
+                
+                script.onerror = function() {
+                    console.warn(`Failed to load Three.js from: ${url}`);
+                    currentIndex++;
+                    attemptLoad();
+                };
+                
+                script.src = url;
+                document.head.appendChild(script);
+            }
+            
+            attemptLoad();
+        }
+        
+        // Start loading Three.js immediately
+        loadThreeJS(window.threeJSConfig.cdnList, function(success) {
+            if (success) {
+                console.log('Three.js ready, triggering load event');
+                window.dispatchEvent(new CustomEvent('threejs-loaded'));
+            } else {
+                console.error('Failed to load Three.js from all sources');
+                window.dispatchEvent(new CustomEvent('threejs-failed'));
+            }
+        });
+    </script>
+    
+    <!-- Chart.js with fallback -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" 
+            onerror="console.warn('Chart.js failed to load from primary CDN'); this.src='https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js'"></script>
+    
+    <!-- Main application script - loads after DOM is ready -->
+    <script defer src="main.js"></script>
+</body>
+</html>

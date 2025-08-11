@@ -692,7 +692,7 @@
         console.log('🎯 Green button is now functional - no auto-start needed');
         console.log('💡 Click the green "Start GPU Test" button to begin');
         
-        // BACKUP: Add additional event listener to button as backup
+        // BACKUP: Add additional event listener to button as backup (after main.js loads)
         setTimeout(function() {
             var btn = document.querySelector('.start-test-btn');
             if (btn) {
@@ -704,22 +704,25 @@
                 
                 // Add new event listener
                 newBtn.addEventListener('click', function(e) {
-                    console.log('🚨 BACKUP EVENT LISTENER TRIGGERED!');
+                    console.log('🚨 BACKUP EVENT LISTENER TRIGGERED - CALLING CORRECT FUNCTION!');
                     e.preventDefault();
                     e.stopPropagation();
                     
                     if (typeof superSimpleTest === 'function') {
+                        console.log('✅ Calling superSimpleTest from backup listener...');
                         superSimpleTest();
                     } else if (window.superSimpleTest) {
+                        console.log('✅ Calling window.superSimpleTest from backup listener...');
                         window.superSimpleTest();
                     } else {
-                        console.error('superSimpleTest not available in backup listener');
+                        console.error('❌ superSimpleTest not available in backup listener');
+                        console.log('Available window functions:', Object.keys(window).filter(key => key.includes('test')));
                     }
                 });
                 
                 console.log('✅ Backup event listener added');
             }
-        }, 1000);
+        }, 3000); // Wait 3 seconds to ensure all other handlers are set
     </script>
     
     <!-- Main application script - loads after DOM is ready -->

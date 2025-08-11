@@ -598,44 +598,96 @@
     <script>
         // Immediate test function
         function superSimpleTest() {
-            console.log('🔥 SUPER SIMPLE TEST ACTIVATED');
-            var hero = document.querySelector('.hero');
-            var levelSelection = document.querySelector('.level-selection');
+            console.log('🔥 SUPER SIMPLE TEST ACTIVATED - SHOWING 4 TEST LEVELS');
             
+            // Hide ALL sections first
+            var allSections = document.querySelectorAll('.hero > div:not(.level-selection), .features, .about-section, .how-it-works, .ad-section, footer, header');
+            allSections.forEach(function(section) {
+                section.style.display = 'none';
+            });
+            console.log('✅ All other sections hidden');
+            
+            // Make sure hero container is visible but hide its other content
+            var hero = document.querySelector('.hero');
             if (hero) {
-                hero.style.display = 'none';
-                console.log('✅ Hero hidden');
+                hero.style.display = 'block';
+                hero.style.position = 'relative';
+                hero.style.minHeight = '100vh';
+                hero.style.backgroundColor = '#1a1a1a';
+                hero.style.padding = '0';
+                hero.style.margin = '0';
+                
+                // Hide hero's direct children except level-selection
+                var heroChildren = hero.children;
+                for (var i = 0; i < heroChildren.length; i++) {
+                    if (!heroChildren[i].classList.contains('level-selection')) {
+                        heroChildren[i].style.display = 'none';
+                    }
+                }
+                console.log('✅ Hero section configured to show only level selection');
             }
             
+            // Show level selection
+            var levelSelection = document.querySelector('.level-selection');
             if (levelSelection) {
                 levelSelection.style.display = 'block';
-                levelSelection.style.position = 'fixed';
-                levelSelection.style.top = '0';
-                levelSelection.style.left = '0';
-                levelSelection.style.width = '100vw';
-                levelSelection.style.height = '100vh';
+                levelSelection.style.position = 'relative';
+                levelSelection.style.width = '100%';
+                levelSelection.style.minHeight = '100vh';
                 levelSelection.style.backgroundColor = '#1a1a1a';
-                levelSelection.style.zIndex = '99999';
-                levelSelection.style.overflow = 'auto';
-                levelSelection.style.padding = '20px';
-                console.log('✅ Level selection shown as overlay');
+                levelSelection.style.padding = '50px 20px';
+                levelSelection.style.boxSizing = 'border-box';
+                console.log('✅ Level selection shown');
                 
-                // Also make sure it's visible
+                // Style the container
                 var container = levelSelection.querySelector('.container');
                 if (container) {
                     container.style.maxWidth = '1200px';
                     container.style.margin = '0 auto';
                     container.style.color = 'white';
-                    container.style.paddingTop = '50px';
+                    
+                    // Make sure all text is white
+                    container.style.fontSize = '16px';
+                    var h2 = container.querySelector('h2');
+                    if (h2) {
+                        h2.style.color = '#00ff88';
+                        h2.style.textAlign = 'center';
+                        h2.style.marginBottom = '20px';
+                        h2.style.fontSize = '2.5rem';
+                    }
+                    
+                    var p = container.querySelector('p');
+                    if (p) {
+                        p.style.color = '#cccccc';
+                        p.style.textAlign = 'center';
+                        p.style.marginBottom = '40px';
+                    }
                 }
+                
+                // Style the level cards
+                var levelCards = levelSelection.querySelectorAll('.level-card');
+                levelCards.forEach(function(card) {
+                    card.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                    card.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+                    card.style.color = 'white';
+                });
+                
+                console.log('✅ Found ' + levelCards.length + ' level cards and styled them');
+            } else {
+                console.error('❌ Level selection not found!');
+                return;
             }
             
-            // Remove about section completely
+            // Remove problematic sections
             var about = document.querySelector('#about');
             if (about) {
                 about.remove();
                 console.log('✅ About section removed');
             }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+            console.log('✅ 4 TEST LEVELS SHOULD NOW BE VISIBLE!');
         }
         
         // BYPASS OPTION: Show level selection immediately on load

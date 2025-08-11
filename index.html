@@ -36,11 +36,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <!-- Favicon (removed to prevent errors) -->
     
     <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -125,7 +121,24 @@
                     </div>
                 </div>
                 
-                <button id="simple-start-btn" class="start-test-btn" type="button">Start GPU Test</button>
+                <button id="simple-start-btn" class="start-test-btn" type="button" onclick="
+                    console.log('BASIC: Button clicked inline!');
+                    document.querySelector('.hero').style.display='none';
+                    var ls = document.querySelector('.level-selection');
+                    ls.style.display='block';
+                    ls.style.position='fixed';
+                    ls.style.top='0';
+                    ls.style.left='0';
+                    ls.style.width='100vw';
+                    ls.style.height='100vh';
+                    ls.style.backgroundColor='#1a1a1a';
+                    ls.style.zIndex='99999';
+                    ls.style.overflow='auto';
+                    ls.style.padding='20px';
+                    var about = document.querySelector('#about');
+                    if(about) about.remove();
+                    return false;
+                ">Start GPU Test</button>
                 
                 <!-- Social Sharing Buttons -->
                 <div class="social-share" id="share" style="display: none;">
@@ -540,6 +553,55 @@
     <!-- Chart.js with fallback -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" 
             onerror="console.warn('Chart.js failed to load from primary CDN'); this.src='https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js'"></script>
+    
+    <!-- Super simple inline test -->
+    <script>
+        // Immediate test function
+        function superSimpleTest() {
+            console.log('🔥 SUPER SIMPLE TEST ACTIVATED');
+            var hero = document.querySelector('.hero');
+            var levelSelection = document.querySelector('.level-selection');
+            
+            if (hero) {
+                hero.style.display = 'none';
+                console.log('✅ Hero hidden');
+            }
+            
+            if (levelSelection) {
+                levelSelection.style.display = 'block';
+                levelSelection.style.position = 'fixed';
+                levelSelection.style.top = '0';
+                levelSelection.style.left = '0';
+                levelSelection.style.width = '100vw';
+                levelSelection.style.height = '100vh';
+                levelSelection.style.backgroundColor = '#1a1a1a';
+                levelSelection.style.zIndex = '99999';
+                levelSelection.style.overflow = 'auto';
+                levelSelection.style.padding = '20px';
+                console.log('✅ Level selection shown as overlay');
+                
+                // Also make sure it's visible
+                var container = levelSelection.querySelector('.container');
+                if (container) {
+                    container.style.maxWidth = '1200px';
+                    container.style.margin = '0 auto';
+                    container.style.color = 'white';
+                }
+            }
+            
+            // Remove about section completely
+            var about = document.querySelector('#about');
+            if (about) {
+                about.remove();
+                console.log('✅ About section removed');
+            }
+        }
+        
+        // Make it globally available
+        window.superSimpleTest = superSimpleTest;
+        
+        console.log('🔥 Inline script loaded! Type superSimpleTest() to test');
+    </script>
     
     <!-- Main application script - loads after DOM is ready -->
     <script defer src="main.js"></script>

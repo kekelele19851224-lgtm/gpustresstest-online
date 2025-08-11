@@ -121,7 +121,13 @@
                     </div>
                 </div>
                 
-                <a href="javascript:void(0);" class="start-test-btn" style="display: inline-block; padding: 18px 40px; background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%); color: #000000; text-decoration: none; border-radius: 50px; font-weight: 600; font-size: 1.25rem; border: none; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);" onclick="
+                <!-- Auto-start message -->
+                <div style="background: #2a2a2a; padding: 15px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #00ff88;">
+                    <p style="margin: 0; color: #00ff88; font-weight: 600;">🚀 自动启动模式</p>
+                    <p style="margin: 5px 0 0 0; color: #cccccc; font-size: 0.9rem;">由于按钮点击问题，页面将在2秒后自动显示测试选择界面。</p>
+                </div>
+                
+                <a href="javascript:void(0);" class="start-test-btn" style="display: inline-block; padding: 18px 40px; background: linear-gradient(135deg, #666666 0%, #555555 100%); color: #cccccc; text-decoration: none; border-radius: 50px; font-weight: 600; font-size: 1.25rem; border: none; cursor: not-allowed; transition: all 0.3s ease; opacity: 0.6;" onclick="
                     console.log('🔥 LINK: JavaScript link clicked!');
                     event.preventDefault();
                     event.stopPropagation();
@@ -648,6 +654,14 @@
         console.log('💡 Available functions:');
         console.log('  - superSimpleTest() - Show level selection overlay');
         console.log('  - showLevelsImmediately() - Bypass start page completely');
+        
+        // AUTO-START: Automatically show level selection after page loads
+        console.log('🚀 AUTO-START: Will automatically show level selection in 2 seconds');
+        console.log('   This bypasses the broken button click issue');
+        setTimeout(function() {
+            console.log('🔥 AUTO-START: Activating level selection now!');
+            superSimpleTest();
+        }, 2000);
     </script>
     
     <!-- Main application script - loads after DOM is ready -->
